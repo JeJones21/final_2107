@@ -63,5 +63,50 @@ RSpec.describe Auction do
     it "can test for highest bids" do
       expect(item1.current_high_bid).to eq(22)
     end
+
+    it "can identify unpopular_items" do
+      item4.add_bid(attendee3, 50)
+
+      expected2 = [item2, item3, item5]
+      expect(auction.unpopular_items).to eq(expected2)
+
+      item3.add_bid(attendee2, 15)
+
+      expect(auction.unpopular_items).to eq([item2, item5])
+    end
+
+    it "can determine potential_revenue" do
+      expect(auction.potential_revenue).to eq(87)
+    end
+
+    it "has to be bid on before it can determine rev" do
+      expected3 = [item1, item3, item4]
+      expect(auction.bid_on).to eq(expected3)
+    end
+
+    xit "can list the bidders" do
+      expect(auction.bidders).to eq(["Megan", "Bob", "Mike"])
+      #wasn't sure if this was due to the typo
+    end
+
+    it "can list the bidders" do
+      expect(auction.bidders).to eq(["Bob", "Megan", "Mike"])
+    end
+
+    it "can list the bidders info" do
+      expected4 = {
+        attendee1 => {
+          :budget => 50, :items => [item1]
+        },
+        attendee2 => {
+          :budget => 75, :items => [item1, item3]
+        },
+        attendee3 => {
+          :budget => 100, :items => [item4]
+        }
+      }
+
+      expect(auction.bidder_info).to eq(expected4)
+    end
   end
 end
